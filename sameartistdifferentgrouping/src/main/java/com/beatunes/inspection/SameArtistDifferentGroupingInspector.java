@@ -62,7 +62,7 @@ public class SameArtistDifferentGroupingInspector extends Inspector {
 
     @Override
     public String getDescription() {
-        return "This inspection reports any songs that have the same artist or album artist, but different groupings.";
+        return "This inspection reports any songs that have the same artist, but different groupings.  This does not inspect album artists.";
     }
 
     @Override
@@ -72,10 +72,10 @@ public class SameArtistDifferentGroupingInspector extends Inspector {
         final ITunesMusicLibrary library = getApplication().getiTunesMusicLibrary();
         if (LOG.isDebugEnabled()) LOG.debug("Getting all artists...");
         artists.addAll(library.getSongPropertyValues("artist", new ArrayList<>()));
-        if (LOG.isDebugEnabled()) LOG.debug("Getting all albumArtists...");
-        artists.addAll(library.getSongPropertyValues("albumArtist", new ArrayList<>()));
+        //if (LOG.isDebugEnabled()) LOG.debug("Getting all albumArtists...");
+        //artists.addAll(library.getSongPropertyValues("albumArtist", new ArrayList<>()));
         // remove various artists as it simply does not count
-        artists.remove("Various Artists");
+        //artists.remove("Various Artists");
 
         // re-order artists, so that the issues are ordered alphabetically
         final List<String> artistList = new ArrayList<>(artists);
@@ -89,7 +89,7 @@ public class SameArtistDifferentGroupingInspector extends Inspector {
             i++;
             final Set<String> groupings = new HashSet<>();
             groupings.addAll(library.getSongPropertyValues("grouping", "artist", artist));
-            groupings.addAll(library.getSongPropertyValues("grouping", "albumArtist", artist));
+            //groupings.addAll(library.getSongPropertyValues("grouping", "albumArtist", artist));
             if (groupings.size() > 1) {
                 // we have an issue: more than one grouping per artist
                 addIssue(new DifferentGroupingIssue(this, artist, groupings));
